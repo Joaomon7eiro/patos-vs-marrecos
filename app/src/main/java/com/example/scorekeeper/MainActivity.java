@@ -23,6 +23,7 @@ public class MainActivity extends AppCompatActivity {
 
     // Variable to check if is a dialog showing on the screen
     boolean mDialogOpen = false;
+    static final int MAX_SCORE = 12;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             default:
         }
         mTeamOneScoreTextView.setText(String.valueOf(mTeamOneScore));
-        if (mTeamOneScore >= 12) {
+        if (mTeamOneScore >= MAX_SCORE) {
             mDialogOpen = true;
 
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
@@ -142,7 +143,7 @@ public class MainActivity extends AppCompatActivity {
             default:
         }
         mTeamTwoScoreTextView.setText(String.valueOf(mTeamTwoScore));
-        if (mTeamTwoScore >= 12) {
+        if (mTeamTwoScore >= MAX_SCORE) {
             mDialogOpen = true;
 
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
