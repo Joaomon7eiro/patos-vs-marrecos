@@ -7,5 +7,13 @@
     <string name="team_one_name">marrecos</string>
     <string name="teams_score_title">tentos</string>
     <string name="team_two_name">patos</string>
-    <string name="reset_button_text">resetar tudo</string>
+    <string name="reset_button_text">Zerar</string>
+    <string name="team_one_win_title">Time dos Marrecos Venceu !</string>
+    <string name="dialog_message">Escolha o que deseja fazer:</string>
+    <string name="new_game_text">Nova Partida</string>
+    <string name="reset_all_text">Zerar tudo</string>
+    <string name="back_text">Voltar</string>
+    <string name="reset_all_question">Tem certeza que deseja zerar tudo?</string>
+    <string name="yes_text">Sim</string>
+    <string name="team_two_win_title">Time dos Patos Venceu !</string>
 </resources>

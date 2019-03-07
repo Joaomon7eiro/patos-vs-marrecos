@@ -7,26 +7,26 @@ import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
-import android.widget.Toast;
 
 public class MainActivity extends AppCompatActivity {
-
     int mTeamOneScore = 0;
     int mTeamOneVictories = 0;
     TextView mTeamOneScoreTextView;
     TextView mTeamOneVictoriesTextView;
-
 
     int mTeamTwoScore = 0;
     int mTeamTwoVictories = 0;
     TextView mTeamTwoScoreTextView;
     TextView mTeamTwoVictoriesTextView;
 
-    Button resetGameButton;
+    Button mResetGameButton;
 
+    // Variable to check if is a dialog showing on the screen
+    boolean mDialogOpen = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        // change the theme to remove the splash screen
         setTheme(R.style.AppTheme);
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
@@ -37,19 +37,19 @@ public class MainActivity extends AppCompatActivity {
         mTeamTwoScoreTextView = findViewById(R.id.team_two_score);
         mTeamTwoVictoriesTextView = findViewById(R.id.team_two_victories);
 
-        resetGameButton = findViewById(R.id.reset_game_button);
-        resetGameButton.setOnClickListener(new View.OnClickListener() {
+        mResetGameButton = findViewById(R.id.reset_game_button);
+        mResetGameButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 resetGame(true);
             }
         });
-
     }
 
     public void controlTeamOneScore(View view) {
-
-        switch (view.getId()){
+        // check if a dialog is already open to prevent add unnecessary points
+        if (mDialogOpen) return;
+        switch (view.getId()) {
             case R.id.team_one_add_one:
                 mTeamOneScore++;
                 break;
@@ -67,15 +67,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default:
         }
-
         mTeamOneScoreTextView.setText(String.valueOf(mTeamOneScore));
+        if (mTeamOneScore >= 12) {
+            mDialogOpen = true;
 
-        if (mTeamOneScore >= 12){
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-            alertDialog.setTitle("Time dos Marrecos Venceu !");
-            alertDialog.setMessage("Escolha o que deseja fazer:");
-
-            alertDialog.setPositiveButton("Nova Partida", new DialogInterface.OnClickListener() {
+            alertDialog.setTitle(getString(R.string.team_one_win_title));
+            alertDialog.setMessage(getString(com.example.scorekeeper.R.string.dialog_message));
+            alertDialog.setPositiveButton(getString(R.string.new_game_text), new DialogInterface.OnClickListener() {
+                // reset scores and add one victory to team one
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     mTeamOneScore = 0;
@@ -85,33 +85,35 @@ public class MainActivity extends AppCompatActivity {
 
                     mTeamTwoScore = 0;
                     mTeamTwoScoreTextView.setText(String.valueOf(mTeamTwoScore));
+
+                    mDialogOpen = false;
                 }
             });
-            alertDialog.setNegativeButton("Resetar Tudo", new DialogInterface.OnClickListener() {
+            alertDialog.setNegativeButton(getString(R.string.reset_all_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     AlertDialog.Builder confirmAlertDialog = new AlertDialog.Builder(MainActivity.this);
-                    confirmAlertDialog.setTitle("Tem certeza que deseja resetar tudo?");
-                    confirmAlertDialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    confirmAlertDialog.setTitle(getString(R.string.reset_all_question));
+                    confirmAlertDialog.setPositiveButton(getString(R.string.yes_text), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            // resetGame passing false because its not coming from resetGameButton
                             resetGame(false);
+                            mDialogOpen = false;
                         }
                     });
-
-                    confirmAlertDialog.setNegativeButton("Voltar", new DialogInterface.OnClickListener() {
+                    confirmAlertDialog.setNegativeButton(getString(R.string.back_text), new DialogInterface.OnClickListener() {
+                        // user don't want to reset game, so return to the previous dialog
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             alertDialog.show();
                         }
                     });
-
                     confirmAlertDialog.setCancelable(false);
                     confirmAlertDialog.show();
                 }
             });
-
-
+            // not allow user to cancel alert dialog
             alertDialog.setCancelable(false);
             alertDialog.show();
         }
@@ -119,8 +121,9 @@ public class MainActivity extends AppCompatActivity {
 
 
     public void controlTeamTwoScore(View view) {
-
-        switch (view.getId()){
+        // check if a dialog is already open to prevent add unnecessary points
+        if (mDialogOpen) return;
+        switch (view.getId()) {
             case R.id.team_two_add_one:
                 mTeamTwoScore++;
                 break;
@@ -138,14 +141,15 @@ public class MainActivity extends AppCompatActivity {
                 break;
             default:
         }
-
         mTeamTwoScoreTextView.setText(String.valueOf(mTeamTwoScore));
+        if (mTeamTwoScore >= 12) {
+            mDialogOpen = true;
 
-        if (mTeamTwoScore >= 12){
             final AlertDialog.Builder alertDialog = new AlertDialog.Builder(MainActivity.this);
-            alertDialog.setTitle("Time dos Patos Venceu !");
-            alertDialog.setMessage("Escolha o que deseja fazer:");
-            alertDialog.setPositiveButton("Nova Partida", new DialogInterface.OnClickListener() {
+            alertDialog.setTitle(getString(R.string.team_two_win_title));
+            alertDialog.setMessage(getString(R.string.dialog_message));
+            alertDialog.setPositiveButton(getString(R.string.new_game_text), new DialogInterface.OnClickListener() {
+                // reset scores and add one victory to team two
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     mTeamTwoScore = 0;
@@ -155,39 +159,42 @@ public class MainActivity extends AppCompatActivity {
 
                     mTeamOneScore = 0;
                     mTeamOneScoreTextView.setText(String.valueOf(mTeamOneScore));
+
+                    mDialogOpen = false;
                 }
             });
-
-            alertDialog.setNegativeButton("Resetar Tudo", new DialogInterface.OnClickListener() {
+            alertDialog.setNegativeButton(getString(R.string.reset_all_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     AlertDialog.Builder confirmAlertDialog = new AlertDialog.Builder(MainActivity.this);
-                    confirmAlertDialog.setTitle("Tem certeza que deseja resetar tudo?");
-                    confirmAlertDialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+                    confirmAlertDialog.setTitle(getString(R.string.reset_all_question));
+                    confirmAlertDialog.setPositiveButton(getString(R.string.yes_text), new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
+                            // resetGame passing false because its not coming from resetGameButton
                             resetGame(false);
+                            mDialogOpen = false;
                         }
                     });
-
-                    confirmAlertDialog.setNegativeButton("Voltar", new DialogInterface.OnClickListener() {
+                    confirmAlertDialog.setNegativeButton(getString(R.string.back_text), new DialogInterface.OnClickListener() {
+                        // user don't want to reset game, so return to the previous dialog
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             alertDialog.show();
                         }
                     });
-
                     confirmAlertDialog.setCancelable(false);
                     confirmAlertDialog.show();
                 }
             });
-
+            // not allow user to cancel alert dialog
             alertDialog.setCancelable(false);
             alertDialog.show();
         }
     }
-
+    // reset all scores
     public void resetGame(boolean fromResetButton) {
+        // if its is coming from resetGameButton then shows the confirm dialog
         if (!fromResetButton) {
             mTeamOneScore = 0;
             mTeamOneVictories = 0;
@@ -200,24 +207,21 @@ public class MainActivity extends AppCompatActivity {
             mTeamTwoVictoriesTextView.setText(String.valueOf(mTeamTwoVictories));
         } else {
             AlertDialog.Builder confirmAlertDialog = new AlertDialog.Builder(MainActivity.this);
-            confirmAlertDialog.setTitle("Tem certeza que deseja resetar tudo?");
-            confirmAlertDialog.setPositiveButton("Sim", new DialogInterface.OnClickListener() {
+            confirmAlertDialog.setTitle(getString(R.string.reset_all_question));
+            confirmAlertDialog.setPositiveButton(getString(R.string.yes_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     resetGame(false);
                 }
             });
-
-            confirmAlertDialog.setNegativeButton("Voltar", new DialogInterface.OnClickListener() {
+            confirmAlertDialog.setNegativeButton(getString(R.string.back_text), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface dialog, int which) {
                     dialog.dismiss();
                 }
             });
-
             confirmAlertDialog.setCancelable(false);
             confirmAlertDialog.show();
         }
-
     }
 }
