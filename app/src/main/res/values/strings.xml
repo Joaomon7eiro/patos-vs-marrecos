@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">Patos vs Marrecos</string>
+    <string name="add_nine_text">+9</string>
+    <string name="add_six_text">+6</string>
+    <string name="add_three_text">+3</string>
+    <string name="zero_text">0</string>
+    <string name="team_one_name">marrecos</string>
+    <string name="teams_score_title">tentos</string>
+    <string name="team_two_name">patos</string>
+    <string name="reset_button_text">resetar tudo</string>
+</resources>
